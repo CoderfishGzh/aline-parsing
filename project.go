@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 )
 
 type Project struct {
@@ -27,8 +28,14 @@ func (cd ContractDetail) print() {
 	fmt.Println("framework: ", cd.Framework.string())
 }
 
-func NewProject(localAddr string, githubAddr string) (Project, error) {
-	dirInfo := getDirInfo(localAddr)
+func NewProject(githubAddr string) (Project, error) {
+	tmpDir, err := getProjectFromGithub(githubAddr)
+	defer os.RemoveAll(tmpDir)
+	if err != nil {
+		return Project{}, err
+	}
+
+	dirInfo := getDirInfo(tmpDir)
 	if dirInfo == nil {
 		log.Print("get dirInfo error")
 		return Project{}, fmt.Errorf("get dirInfo error")
@@ -36,7 +43,6 @@ func NewProject(localAddr string, githubAddr string) (Project, error) {
 	var project Project
 	project.DirInfo = dirInfo
 	project.GithubAddr = githubAddr
-	project.LocalAddr = localAddr
 	// check the project type
 	project.projectType()
 	// check the ecology

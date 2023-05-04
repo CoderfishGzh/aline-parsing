@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -43,4 +46,22 @@ func containsString(arr []string, target string) bool {
 		}
 	}
 	return false
+}
+
+func getProjectFromGithub(url string) (string, error) {
+	// 创建随机文件夹
+	tempDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		panic(err)
+	}
+	//defer os.RemoveAll(tempDir)
+
+	fmt.Println("Temporary directory created:", tempDir)
+	cmd := exec.Command("git", "clone", url, tempDir)
+	err = cmd.Run()
+	if err != nil {
+		fmt.Println("Failed to execute command:", err)
+		return "", err
+	}
+	return tempDir, nil
 }

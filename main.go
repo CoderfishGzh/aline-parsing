@@ -3,8 +3,10 @@ package main
 import "fmt"
 
 func main() {
+	//getProjectFromGithub("git@github.com:mohaijiang/my-sui-nfttest4.git")
+	project, err := NewProject("git@github.com:mohaijiang/my-sui-nfttest4.git")
 	// truffle: /home/gzh/work/checkCon/my-contract-Erc919/
-	project, err := NewProject("/home/gzh/work/checkCon/my-contract-Erc919/", "")
+	//project, err := NewProject("/home/gzh/work/checkCon/my-contract-Erc919/", "")
 
 	// foundry: /home/gzh/work/checkCon/hello_foundry/
 	//project, err := NewProject("/home/gzh/work/checkCon/hello_foundry/", "")
